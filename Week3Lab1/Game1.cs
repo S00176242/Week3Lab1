@@ -11,6 +11,14 @@ namespace Week3Lab1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont font;
+        string message = "Message to Fade";
+        byte alpha = 255;
+        private string timeMessage;
+        string[] messages = new string[] { "Item 1", "Item 2", "Item 3", "Item 4" };
+        byte[] alphas = new byte[] { 255, 255, 255, 255 };
+        int currentSelectedMessage = 0;
+        
 
         public Game1()
         {
@@ -39,6 +47,7 @@ namespace Week3Lab1
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>("fade");
 
             // TODO: use this.Content to load your game content here
         }
@@ -62,6 +71,14 @@ namespace Week3Lab1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            int seconds = gameTime.ElapsedGameTime.Milliseconds;
+            if (alpha > 0)
+                alpha -= (byte)(seconds/8);
+            else if (alpha <= 255)
+                alpha += (byte)(seconds/8);
+              
+            timeMessage = "Time Elapsed" + gameTime.TotalGameTime.Seconds.ToString();
+            
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -74,6 +91,22 @@ namespace Week3Lab1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+            Color Messagecolor = new Color((byte)255, (byte)255, (byte)255, alpha--);
+            spriteBatch.DrawString(font, timeMessage, new Vector2(20, 20), Color.White);
+            spriteBatch.DrawString(font, message, new Vector2(100, 100), Messagecolor);
+            Vector2 startPosition = GraphicsDevice.Viewport.Bounds.Center.ToVector2();
+            foreach (var item in messages)
+            {
+                spriteBatch.DrawString(font, item, startPosition, Color.White);
+                float textHeight = font.MeasureString(item).Y;
+                startPosition += new Vector2(0, textHeight + 10);
+            }
+           
+            Vector2 messageSize = font.MeasureString(messages[0]);
+            
+            spriteBatch.End();
 
             // TODO: Add your drawing code here
 

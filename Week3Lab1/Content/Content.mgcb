@@ -13,3 +13,16 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin fade.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fade.spritefont
+
+#begin sndBallHit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sndBallHit.wav
+
